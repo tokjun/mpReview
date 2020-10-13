@@ -2108,7 +2108,7 @@ class mpReviewLogic(ScriptedLoadableModuleLogic):
 
         seriesMap[seriesNumber] = {'MetaInfo':None, 'NRRDLocation':volumePath,'LongName':seriesDescription}
         seriesMap[seriesNumber]['ShortName'] = str(seriesNumber)+":"+seriesDescription
-
+          
         canonicalFile = os.path.join(os.path.split(root)[0], "Canonical", seriesNumber+".json")
         try:
           canonicalDict = json.load(open(canonicalFile))
@@ -2156,14 +2156,14 @@ class mpReviewLogic(ScriptedLoadableModuleLogic):
 
     dom = xml.dom.minidom.parse(f)
     number = findElement(dom, 'SeriesNumber')
-    name = self.normalizeSeriesDescription(findElement(dom, 'SeriesDescription').encode('utf-8').strip())
-    return number, name
+    name = mpReviewLogic.normalizeSeriesDescription(findElement(dom, 'SeriesDescription').encode('utf-8').strip())
+    return number, str(name)
 
   @staticmethod
   def normalizeSeriesDescription(name):
     import re
-    pattern = re.compile('[^a-zA-Z0-9_ ]')
-    normalized_name = pattern.sub('_', name)
+    pattern = re.compile(b'[^a-zA-Z0-9_ ]')
+    normalized_name = pattern.sub(b'_', name)
     return normalized_name
 
   def formatDate(self, extractedDate):
